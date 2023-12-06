@@ -10,6 +10,10 @@ import { NotFoundPage } from "./pages/not-found-page";
 import { ProfilePage } from "./pages/profile-page";
 import { ProtectedPage } from "./pages/protected-page";
 import { PublicPage } from "./pages/public-page";
+import { SqlPage } from "./pages/dashboard/sql-page";
+import { JobsPage } from "./pages/dashboard/jobs-page";
+import { AccountPage } from "./pages/dashboard/account-page";
+import { BillingPage } from "./pages/dashboard/billing-page";
 
 export const App: React.FC = () => {
   const { isLoading } = useAuth0();
@@ -24,11 +28,11 @@ export const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/public" element={<PublicPage />} />
       <Route
         path="/profile"
         element={<AuthenticationGuard component={ProfilePage} />}
       />
-      <Route path="/public" element={<PublicPage />} />
       <Route
         path="/protected"
         element={<AuthenticationGuard component={ProtectedPage} />}
@@ -36,6 +40,22 @@ export const App: React.FC = () => {
       <Route
         path="/admin"
         element={<AuthenticationGuard component={AdminPage} />}
+      />
+      <Route
+        path="/sql"
+        element={<AuthenticationGuard component={SqlPage} />}
+      />
+            <Route
+        path="/jobs"
+        element={<AuthenticationGuard component={JobsPage} />}
+      />
+            <Route
+        path="/account"
+        element={<AuthenticationGuard component={AccountPage} />}
+      />
+            <Route
+        path="/billing"
+        element={<AuthenticationGuard component={BillingPage} />}
       />
       <Route path="/callback" element={<CallbackPage />} />
       <Route path="*" element={<NotFoundPage />} />

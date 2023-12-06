@@ -19,14 +19,13 @@ import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems } from '../components/dashboard/listitems';
 import Chart from '../components/dashboard/chart';
-import Deposits from '../components/dashboard/deposits';
-import { Orders } from '../components/dashboard/orders';
+import { Spend } from '../components/dashboard/billing';
+import { Jobs } from '../components/dashboard/jobs';
+import { SideNav } from "src/components/navigation/side-nav";
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
 
 
 export const ProfilePage: React.FC = () => {
@@ -35,7 +34,6 @@ export const ProfilePage: React.FC = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const drawerWidth = 240;
 
 
   if (!user) {
@@ -43,30 +41,10 @@ export const ProfilePage: React.FC = () => {
   }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
       <PageLayout>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
-          <Drawer
-            sx={{
-              width: drawerWidth,
-              flexShrink: 0,
-              '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-                top: 'auto',
-              },
-            }}
-            variant="permanent"
-            anchor="left"
-          >
-            <List>
-              {mainListItems}
-            </List>
-            <List>
-              {secondaryListItems}
-            </List>
-          </Drawer>
+          <SideNav />
           <Box
             component="main"
             sx={{
@@ -76,11 +54,10 @@ export const ProfilePage: React.FC = () => {
                   : theme.palette.grey[900],
               flexGrow: 1,
               height: '100%',
-              // overflow: 'auto',
             }}
           >
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <Grid container spacing={3}>
+              <Grid container spacing={3} >
                 <Grid item xs={12} md={8} lg={9}>
                   <Paper
                     sx={{
@@ -102,13 +79,7 @@ export const ProfilePage: React.FC = () => {
                       height: 240,
                     }}
                   >
-                    <Deposits />
-                  </Paper>
-                </Grid>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Orders />
+                    <Spend />
                   </Paper>
                 </Grid>
               </Grid>
@@ -116,6 +87,5 @@ export const ProfilePage: React.FC = () => {
           </Box>
         </Box>
       </PageLayout>
-    </ThemeProvider>
   );
 };
