@@ -6,21 +6,17 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
-import { InviteUserModal } from "./invite-user-modal";
+import Typography from "@mui/material/Typography";
+import { Member } from "src/models/account-management";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useAuth0 } from "@auth0/auth0-react";
+import { deleteMember, getMembers } from "src/services/flinkfast.service";
 
-function createData(
-    name: string,
-    email: string
-    ) {
-  return { name, email };
-}
-
-const rows = [createData("Seth Saperstein", "sethsaps@gmail.com"), createData("Foo Bar", "foobar@gmail.com")];
 
 function preventDefault(event: React.MouseEvent) {
   event.preventDefault();
@@ -28,7 +24,36 @@ function preventDefault(event: React.MouseEvent) {
 
 export const Members: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [members, setMembers] = useState<Member[] | undefined>(undefined);
 
+  const { getAccessTokenSilently } = useAuth0();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const getMembersCall = async () => {
+      const accessToken = await getAccessTokenSilently();
+      const { data, error } = await getMembers(accessToken);
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (data) {
+        setMembers(data.members);
+      }
+      if (error) {
+        console.log(error.message);
+      }
+    };
+
+    getMembersCall();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [getAccessTokenSilently]);
+  
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,11 +62,20 @@ export const Members: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleDelete = () => {
-    // Handle start action
+  const handleDelete = async (email: string) => {
     handleMenuClose();
-  };
+    console.log(`Deleting member: ${email}`);
+    const memberToDelete: Member = { email };
+    const accessToken = await getAccessTokenSilently();
+    const { error } = await deleteMember(accessToken, memberToDelete);
+    if (error) {
+      console.error(`Error deleting member: ${error.message}`);
+    } else {
+      console.log(`Member deleted successfully: ${email}`);
 
+      setMembers(prevMembers => prevMembers?.filter((e) => e.email !== email) || []);
+    }
+  };
 
 
   return (
@@ -49,7 +83,11 @@ export const Members: React.FC = () => {
       <Table size="medium">
         <TableHead>
           <TableRow>
-            <TableCell>Members</TableCell>
+            <TableCell>
+                <Typography variant="h5">
+                    Members
+                </Typography>
+            </TableCell>
             <TableCell></TableCell>
             <TableCell sx={{ textAlign: "right" }}>
             </TableCell>
@@ -69,10 +107,11 @@ export const Members: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.email}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.email}</TableCell>
+          {members !== undefined ? (
+            members.map((member) => (
+            <TableRow key={member.email}>
+              <TableCell>{member.name}</TableCell>
+              <TableCell>{member.email}</TableCell>
               <TableCell sx={{ textAlign: "right" }}>
                 <IconButton onClick={handleMenuOpen}>
                   <MoreVertIcon />
@@ -82,11 +121,18 @@ export const Members: React.FC = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                  <MenuItem onClick={e => handleDelete(member.email)}>Delete</MenuItem>
                 </Menu>
               </TableCell>
             </TableRow>
-          ))}
+          )) 
+          ) : (
+            <TableRow>
+                <TableCell colSpan={3} sx={{ textAlign: 'center', py: 2 }}>
+                <CircularProgress />
+                </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </React.Fragment>

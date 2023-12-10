@@ -2,9 +2,9 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ApiResponse } from "../models/api-response";
 import { AppError } from "../models/app-error";
 
-export const callExternalApi = async (options: {
+export const callExternalApi = async <T>(options: {
   config: AxiosRequestConfig;
-}): Promise<ApiResponse> => {
+}): Promise<ApiResponse<T>> => {
   try {
     const response: AxiosResponse = await axios(options.config);
     const { data } = response;

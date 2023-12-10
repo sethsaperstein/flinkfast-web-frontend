@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import React, { useEffect, useState } from "react";
 import { CodeSnippet } from "../components/code-snippet";
 import { PageLayout } from "../components/page-layout";
-import { getAdminResource } from "../services/message.service";
+import { getAdminResource } from "../services/flinkfast.service";
 
 export const AdminPage: React.FC = () => {
   const [message, setMessage] = useState<string>("");

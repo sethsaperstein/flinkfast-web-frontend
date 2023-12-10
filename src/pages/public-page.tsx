@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CodeSnippet } from "../components/code-snippet";
 import { PageLayout } from "../components/page-layout";
-import { getPublicResource } from "../services/message.service";
+import { getPublicResource } from "../services/flinkfast.service";
 
 export const PublicPage: React.FC = () => {
   const [message, setMessage] = useState<string>("");

@@ -7,40 +7,52 @@ function preventDefault(event: React.MouseEvent) {
   event.preventDefault();
 }
 
-export function Spend() {
+interface SpendProps {
+  forecast: string
+}
+
+export function Spend({ forecast }: SpendProps) {
   return (
     <React.Fragment>
       <Typography color="text.secondary">
         Current month's total forecast
       </Typography>
       <Typography component="p" variant="h4">
-        USD $3,024.00
+        USD ${forecast}
       </Typography>
     </React.Fragment>
   );
 }
 
-export function JobCount() {
+interface JobCountProps {
+  count: number
+}
+
+export function JobCount({ count }: JobCountProps) {
   return (
     <React.Fragment>
       <Typography color="text.secondary">
         Current month's total running jobs
       </Typography>
       <Typography component="p" variant="h4">
-        14
+        {count}
       </Typography>
     </React.Fragment>
   );
 }
 
-export function ProcessingUnits() {
+interface ProcessingUnitsProps {
+  units: number
+}
+
+export function ProcessingUnits({ units }: ProcessingUnitsProps) {
   return (
     <React.Fragment>
       <Typography color="text.secondary">
         Current month's total processing unit hours
       </Typography>
       <Typography component="p" variant="h4">
-        1020
+        {units}
       </Typography>
     </React.Fragment>
   );
