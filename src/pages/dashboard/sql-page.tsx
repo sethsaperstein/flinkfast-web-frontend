@@ -11,7 +11,7 @@ import { SideNav } from "../../components/navigation/side-nav";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Editor, Results } from "src/components/dashboard/sql";
+import { Sql } from "src/components/dashboard/sql";
 
 export const SqlPage: React.FC = () => {
   return (
@@ -41,18 +41,7 @@ export const SqlPage: React.FC = () => {
             </Toolbar>
           </AppBar>
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Paper sx={{ display: "flex", flexDirection: "column" }}>
-                  <Editor />
-                </Paper>
-              </Grid>
-              <Grid item xs={12}>
-                <Paper sx={{ display: "flex", flexDirection: "column" }}>
-                  <Results />
-                </Paper>
-              </Grid>
-            </Grid>
+            <Sql />
           </Container>
         </Box>
       </Box>

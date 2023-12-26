@@ -14,6 +14,7 @@ import { SqlPage } from "./pages/dashboard/sql-page";
 import { JobsPage } from "./pages/dashboard/jobs-page";
 import { AccountPage } from "./pages/dashboard/account-page";
 import { BillingPage } from "./pages/dashboard/billing-page";
+import { TestPage } from "./pages/test-page";
 
 export const App: React.FC = () => {
   const { isLoading } = useAuth0();
@@ -45,17 +46,21 @@ export const App: React.FC = () => {
         path="/sql"
         element={<AuthenticationGuard component={SqlPage} />}
       />
-            <Route
+      <Route
         path="/jobs"
         element={<AuthenticationGuard component={JobsPage} />}
       />
-            <Route
+      <Route
         path="/account"
         element={<AuthenticationGuard component={AccountPage} />}
       />
-            <Route
+      <Route
         path="/billing"
         element={<AuthenticationGuard component={BillingPage} />}
+      />
+      <Route
+        path="/test"
+        element={<TestPage />}
       />
       <Route path="/callback" element={<CallbackPage />} />
       <Route path="*" element={<NotFoundPage />} />
