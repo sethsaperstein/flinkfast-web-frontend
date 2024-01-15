@@ -10,11 +10,11 @@ const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <Auth0ProviderWithNavigate>
         <App />
       </Auth0ProviderWithNavigate>
     </BrowserRouter>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

@@ -1,5 +1,4 @@
 import SockJS from 'sockjs-client';
-import { Message } from 'src/models/message';
 import Stomp from 'stompjs';
 
 const apiServerUrl = process.env.REACT_APP_API_SERVER_URL;
@@ -20,7 +19,7 @@ export class WebSocketService {
     const socket = new SockJS(`http://localhost:6060/secured/room`);
     const stomp: any = Stomp.over(socket);
 
-    await new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       stomp.connect(headers, () => {
         console.log("set stomp client: ", stomp);
         this.stompClient = stomp;
@@ -42,31 +41,22 @@ export class WebSocketService {
         });
 
         this.sendMessage(query);
+
         resolve();
+
     }, function (error) {
         console.error('Error connecting to WebSocket server:', error);
         reject(error);
     });
   });
-
-    return new Promise<void>((resolve) => {
-      resolve();
-    });
   }
 
   disconnect(): void {
-    // required to remove reference from component which was preventing gc
-    // and leaving subscription open
     console.log("disconnecting socket");
-    // this.onMessageCallback = null;
-    // this.subscription?.unsubscribe();
-    // this.stompClient?.disconnect(()=>{});
+    this.onMessageCallback = null;
+    console.log("stomp client on disconnect: ", this.stompClient);
     if (this.stompClient) {
       console.log("Disconnecting stomp client");
-      // Clear the callback to prevent further processing
-      this.onMessageCallback = null;
-
-      // Unsubscribe from the subscription
       if (this.subscription) {
           console.log("unsubscribing");
           for (const sub in this.stompClient.subscriptions) {
@@ -78,13 +68,11 @@ export class WebSocketService {
           this.subscription = undefined;
       }
 
-      // Disconnect the WebSocket
       this.stompClient.disconnect(() => {
           console.log("WebSocket disconnected");
       });
 
-      // Clear references
-      this.stompClient = undefined;
+      // this.stompClient = undefined;
       this.accessToken = undefined;
       this.sessionId = undefined;
     }

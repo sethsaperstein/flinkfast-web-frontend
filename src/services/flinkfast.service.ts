@@ -5,6 +5,7 @@ import { Message } from "src/models/message";
 import { BillingSummary } from "src/models/billing-summary";
 import { Invite, Invites, Member, Members } from "src/models/account-management";
 import { DeleteJobData, Jobs } from "src/models/jobs";
+import { Session } from "src/models/sql";
 
 const apiServerUrl = process.env.REACT_APP_API_SERVER_URL;
 
@@ -233,4 +234,42 @@ export const deleteJob = async (
   };
 };
 
+export const getSession = async (
+  accessToken: string
+): Promise<ApiResponse<Session>> => {
+  const config: AxiosRequestConfig = {
+    url: `${apiServerUrl}/api/sql/session`,
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
 
+  const { data, error } = (await callExternalApi({ config })) as ApiResponse<Session>;
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const createSession = async (
+  accessToken: string
+): Promise<ApiResponse<Session>> => {
+  const config: AxiosRequestConfig = {
+    url: `${apiServerUrl}/api/sql/session`,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  const { data, error } = (await callExternalApi({ config })) as ApiResponse<Session>;
+
+  return {
+    data,
+    error,
+  };
+};

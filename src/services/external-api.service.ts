@@ -20,6 +20,7 @@ export const callExternalApi = async <T>(options: {
       const { response } = axiosError;
 
       let message = "http request failed";
+      let code: string|null = null;
 
       if (response && response.statusText) {
         message = response.statusText;
@@ -27,6 +28,10 @@ export const callExternalApi = async <T>(options: {
 
       if (axiosError.message) {
         message = axiosError.message;
+      }
+
+      if (axiosError.code) {
+        code = axiosError.code
       }
 
       if (response && response.data && (response.data as AppError).message) {
@@ -37,6 +42,7 @@ export const callExternalApi = async <T>(options: {
         data: null,
         error: {
           message,
+          code,
         },
       };
     }
@@ -45,6 +51,7 @@ export const callExternalApi = async <T>(options: {
       data: null,
       error: {
         message: (error as Error).message,
+        code: null,
       },
     };
   }
