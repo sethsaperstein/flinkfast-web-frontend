@@ -19,8 +19,10 @@ import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import { useAuth0 } from "@auth0/auth0-react";
 import TableHead from "@mui/material/TableHead";
-import { createSession, getSession } from "src/services/flinkfast.service";
-import { AppError } from "src/models/app-error";
+import { createJob, createSession, getSession } from "src/services/flinkfast.service";
+import CheckIcon from '@mui/icons-material/Check';
+import Alert from "@mui/material/Alert";
+import { SqlData } from "src/models/sql";
 
 enum QueryState {
     NOT_STARTED = 'NOT_STARTED',
@@ -65,6 +67,7 @@ export const Sql: React.FC = () => {
   const [queryState, setQueryState] = useState<QueryState>(QueryState.NOT_STARTED);
   const [queryId, setQueryId] = useState(0);
   const [sessionState, setSessionState] = useState<SessionState>(SessionState.NOT_READY);
+  const [deployedJobName, setDeployedJobName] = useState<String|undefined>(undefined);
   const { getAccessTokenSilently } = useAuth0();
 
 
@@ -149,15 +152,31 @@ export const Sql: React.FC = () => {
   const handleQueryComplete = () => {
     console.log("Query completed.");
     setQueryState(QueryState.COMPLETED);
-  }
+  };
 
-  const handleDeploy = () => {
-    console.log("Deploy Query");
-  }
+  const handleDeploy = async (sql: string) => {
+    console.log("Deploying Query");
+    const accessToken = await getAccessTokenSilently();
+    const sqlData: SqlData = { 
+      sql: sql
+    };
+    const { data, error } = await createJob(accessToken, sqlData);
+    
+    if (data) {
+      console.log(`Job created successfully: ${data.name}`);
+      setDeployedJobName(data.name);
+    }
+    if (error) {
+      console.log(`Job failed to create: ${error.message}`);
+    }
+  };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3}>      
       <Grid item xs={12}>
+        {deployedJobName !== undefined && (
+          <DeployJobAlert jobName={deployedJobName} />
+        )}
         <Paper sx={{ display: "flex", flexDirection: "column" }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Box
@@ -215,7 +234,7 @@ export const Sql: React.FC = () => {
               <Box sx={{ display: "flex", flexDirection: "row" }}>
                 <Button
                   variant="contained"
-                  onClick={handleDeploy}
+                  onClick={() => handleDeploy(sqlQuery)}
                   sx={{
                     backgroundColor: "grey",
                     m: 2,
@@ -449,3 +468,27 @@ const Query: React.FC<{ queryId: number, query: string, onQueryComplete: () => v
       </>
     );
   };
+
+  const DeployJobAlert: React.FC<{jobName: String}> = ({ jobName }) => {
+    const [showAlert, setShowAlert] = useState(true);
+
+    useEffect(() => {
+      const timerId = setTimeout (() => {
+        setShowAlert(false);
+      }, 5000);
+    }, [jobName]);
+
+    return (
+      <>
+        {showAlert && (
+          <Alert 
+            icon={<CheckIcon fontSize="inherit" />} 
+            severity="success"
+            sx={{marginBottom: 2, marginTop: 0, fontSize: "small"}}
+          >
+            Job {jobName} has successfully been deployed
+          </Alert>
+        )}
+      </>
+    );
+  }

@@ -4,8 +4,8 @@ import { callExternalApi } from "./external-api.service";
 import { Message } from "src/models/message";
 import { BillingSummary } from "src/models/billing-summary";
 import { Invite, Invites, Member, Members } from "src/models/account-management";
-import { DeleteJobData, Jobs } from "src/models/jobs";
-import { Session } from "src/models/sql";
+import { DeleteJobData, Job, Jobs } from "src/models/jobs";
+import { Session, SqlData } from "src/models/sql";
 
 const apiServerUrl = process.env.REACT_APP_API_SERVER_URL;
 
@@ -217,7 +217,7 @@ export const deleteJob = async (
   job: DeleteJobData,
 ): Promise<ApiResponse<void>> => {
   const config: AxiosRequestConfig = {
-    url: `${apiServerUrl}/api/account/members`,
+    url: `${apiServerUrl}/api/jobs`,
     method: "DELETE",
     headers: {
       "content-type": "application/json",
@@ -267,6 +267,29 @@ export const createSession = async (
   };
 
   const { data, error } = (await callExternalApi({ config })) as ApiResponse<Session>;
+
+  return {
+    data,
+    error,
+  };
+};
+
+export const createJob = async (
+  accessToken: string,
+  sql: SqlData,
+): Promise<ApiResponse<Job>> => {
+  console.log(`create job sql: ${sql.sql}`);
+  const config: AxiosRequestConfig = {
+    url: `${apiServerUrl}/api/jobs`,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data: sql,
+  };
+
+  const { data, error } = (await callExternalApi({ config })) as ApiResponse<Job>;
 
   return {
     data,
