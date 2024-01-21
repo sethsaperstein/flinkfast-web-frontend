@@ -10,7 +10,7 @@ import { SideNav } from "../../components/navigation/side-nav";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Invitations } from "src/components/dashboard/invitations";
+import { PendingMembers } from "src/components/dashboard/pending-members";
 import { Members } from "src/components/dashboard/members";
 
 export const AccountPage: React.FC = () => {
@@ -44,7 +44,7 @@ export const AccountPage: React.FC = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Invitations />
+                  <PendingMembers />
                 </Paper>
               </Grid>
               <Grid item xs={12}>

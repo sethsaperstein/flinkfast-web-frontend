@@ -3,7 +3,7 @@ import { ApiResponse } from "../models/api-response";
 import { callExternalApi } from "./external-api.service";
 import { Message } from "src/models/message";
 import { BillingSummary } from "src/models/billing-summary";
-import { Invite, Invites, Member, Members } from "src/models/account-management";
+import { Member, Members, PendingMembers } from "src/models/account-management";
 import { DeleteJobData, Job, Jobs } from "src/models/jobs";
 import { Session, SqlData } from "src/models/sql";
 
@@ -86,11 +86,11 @@ export const getBillingSummary = async (
   };
 };
 
-export const getInvites = async (
+export const getPendingMembers = async (
   accessToken: string
-): Promise<ApiResponse<Invites>> => {
+): Promise<ApiResponse<PendingMembers>> => {
   const config: AxiosRequestConfig = {
-    url: `${apiServerUrl}/api/account/invites`,
+    url: `${apiServerUrl}/api/account/pending-members`,
     method: "GET",
     headers: {
       "content-type": "application/json",
@@ -98,7 +98,7 @@ export const getInvites = async (
     },
   };
 
-  const { data, error } = (await callExternalApi({ config })) as ApiResponse<Invites>;
+  const { data, error } = (await callExternalApi({ config })) as ApiResponse<PendingMembers>;
 
   return {
     data,
@@ -106,40 +106,18 @@ export const getInvites = async (
   };
 };
 
-export const deleteInvite = async (
+export const approveMember = async (
   accessToken: string,
-  invite: Invite,
+  member: Member,
 ): Promise<ApiResponse<void>> => {
   const config: AxiosRequestConfig = {
-    url: `${apiServerUrl}/api/account/invites`,
-    method: "DELETE",
+    url: `${apiServerUrl}/api/account/members`,
+    method: "PUT",
     headers: {
       "content-type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
-    data: invite
-  };
-
-  const { error } = (await callExternalApi({ config })) as ApiResponse<void>;
-
-  return {
-    data: undefined,
-    error,
-  };
-};
-
-export const sendInvite = async (
-  accessToken: string,
-  invite: Invite,
-): Promise<ApiResponse<void>> => {
-  const config: AxiosRequestConfig = {
-    url: `${apiServerUrl}/api/account/invites`,
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data: invite
+    data: member
   };
 
   const { error } = (await callExternalApi({ config })) as ApiResponse<void>;

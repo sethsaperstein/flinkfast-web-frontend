@@ -62,18 +62,17 @@ export const Members: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleDelete = async (email: string) => {
+  const handleDelete = async (member: Member) => {
     handleMenuClose();
-    console.log(`Deleting member: ${email}`);
-    const memberToDelete: Member = { email };
+    console.log(`Deleting member: ${member.email}`);
     const accessToken = await getAccessTokenSilently();
-    const { error } = await deleteMember(accessToken, memberToDelete);
+    const { error } = await deleteMember(accessToken, member);
     if (error) {
       console.error(`Error deleting member: ${error.message}`);
     } else {
-      console.log(`Member deleted successfully: ${email}`);
+      console.log(`Member deleted successfully: ${member.email}`);
 
-      setMembers(prevMembers => prevMembers?.filter((e) => e.email !== email) || []);
+      setMembers(prevMembers => prevMembers?.filter((e) => e.id !== member.id) || []);
     }
   };
 
@@ -89,8 +88,7 @@ export const Members: React.FC = () => {
                 </Typography>
             </TableCell>
             <TableCell></TableCell>
-            <TableCell sx={{ textAlign: "right" }}>
-            </TableCell>
+            <TableCell sx={{ textAlign: "right" }} />
           </TableRow>
         </TableHead>
         <TableHead>
@@ -103,13 +101,13 @@ export const Members: React.FC = () => {
           >
             <TableCell>Name</TableCell>
             <TableCell>Email</TableCell>
-            <TableCell></TableCell>
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
           {members !== undefined ? (
             members.map((member) => (
-            <TableRow key={member.email}>
+            <TableRow key={member.id}>
               <TableCell>{member.name}</TableCell>
               <TableCell>{member.email}</TableCell>
               <TableCell sx={{ textAlign: "right" }}>
@@ -121,7 +119,7 @@ export const Members: React.FC = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem onClick={e => handleDelete(member.email)}>Delete</MenuItem>
+                  <MenuItem onClick={e => handleDelete(member)}>Delete</MenuItem>
                 </Menu>
               </TableCell>
             </TableRow>

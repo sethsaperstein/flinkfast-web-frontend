@@ -1,12 +1,9 @@
-export interface Invite {
-    email: string
-}
-
-export interface Invites {
-    emails: [string];
+export interface PendingMembers {
+    members: [Member];
 }
 
 export interface Member {
+    id: string;
     email: string;
     name?: string;
 }
