@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Chart from "../../components/dashboard/chart";
 import {
   Spend,
   JobCount,
@@ -20,11 +19,13 @@ import Typography from "@mui/material/Typography";
 import { BillingSummary } from "src/models/billing-summary";
 import { getBillingSummary as getBilling } from "src/services/flinkfast.service";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from "@mui/material/styles";
 
 export const BillingPage: React.FC = () => {
     const [billingSummary, setBillingSummary] = useState<BillingSummary | undefined>(undefined);
 
   const { getAccessTokenSilently } = useAuth0();
+  const theme = useTheme();
 
   useEffect(() => {
     let isMounted = true;
@@ -55,7 +56,6 @@ export const BillingPage: React.FC = () => {
   return (
     <PageLayout>
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
         <SideNav />
         <Box
           component="main"

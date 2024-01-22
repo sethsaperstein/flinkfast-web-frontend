@@ -17,7 +17,6 @@ export const SqlPage: React.FC = () => {
   return (
     <PageLayout>
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
         <SideNav />
         <Box
           component="main"

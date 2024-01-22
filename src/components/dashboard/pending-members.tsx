@@ -96,6 +96,7 @@ export const PendingMembers: React.FC = () => {
     } else {
       console.log(`Approved successfully: ${member.email}`);
 
+      // TODO: use redux to add approved member to members component
       setPendingMembers(prevPendingMembers => prevPendingMembers?.filter((e) => e.id !== member.id) || []);
     }
   }
@@ -112,11 +113,6 @@ export const PendingMembers: React.FC = () => {
             </TableCell>
             <TableCell></TableCell>
             <TableCell sx={{ textAlign: "right" }} />
-            
-            {/* <TableCell sx={{ textAlign: "right" }}>
-              <Button variant="contained" onClick={handleInviteUser}>Invite User</Button>
-              <InviteUserModal open={isModalOpen} onClose={handleCloseModal} onSend={handleSend} />
-            </TableCell> */}
           </TableRow>
         </TableHead>
         <TableHead>

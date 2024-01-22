@@ -1,11 +1,18 @@
-import React from "react";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 export const PageLoader: React.FC = () => {
-  const loadingImg = "https://cdn.auth0.com/blog/hello-auth0/loader.svg";
-
-  return (
-    <div className="loader">
-      <img src={loadingImg} alt="Loading..." />
-    </div>
-  );
-};
+    return (
+        <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: '100vh'
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+}

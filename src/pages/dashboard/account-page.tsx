@@ -10,14 +10,13 @@ import { SideNav } from "../../components/navigation/side-nav";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { PendingMembers } from "src/components/dashboard/pending-members";
 import { Members } from "src/components/dashboard/members";
+import { PendingMembers } from "src/components/dashboard/pending-members";
 
 export const AccountPage: React.FC = () => {
   return (
     <PageLayout>
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
         <SideNav />
         <Box
           component="main"

@@ -14,9 +14,8 @@ import Typography from "@mui/material/Typography";
 
 export const JobsPage: React.FC = () => {
   return (
-    <PageLayout>
+    <PageLayout theme="light">
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
         <SideNav />
         <Box
           component="main"
