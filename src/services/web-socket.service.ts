@@ -16,7 +16,7 @@ export class WebSocketService {
     const headers: { [key: string]: string } = {};
     headers['X-Authorization'] = `Bearer ${accessToken}`;
 
-    const socket = new SockJS(`http://localhost:6060/secured/room`);
+    const socket = new SockJS(`${apiServerUrl}/secured/room`);
     const stomp: any = Stomp.over(socket);
 
     return new Promise<void>((resolve, reject) => {
@@ -27,7 +27,7 @@ export class WebSocketService {
         console.log("ws :", stomp.ws.url);
         console.log("ws url: ", stomp.ws._transport.url)
         var url = stomp.ws._transport.url;
-        url = url.replace(`ws://localhost:6060/secured/room/`,  "");
+        url = url.replace(`${wsServerUrl}/secured/room/`,  "");
         url = url.replace("/websocket", "");
         url = url.replace(/^[0-9]+\//, "");
         console.log("Your current session is: " + url);
